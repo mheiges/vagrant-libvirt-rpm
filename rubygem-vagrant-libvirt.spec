@@ -3,7 +3,7 @@
 %global gem_name vagrant-libvirt
 
 Name: rubygem-%{gem_name}
-Version: 0.0.16
+Version: 0.0.30
 Release: 1%{?dist}
 Summary: Vagrant provider for libvirt
 Group: Development/Languages
@@ -12,9 +12,8 @@ URL: https://github.com/pradels/vagrant-libvirt
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: https://gist.githubusercontent.com/purpleidea/8071962/raw/ee27c56e66aafdcb9fd9760f123e7eda51a6a51e/.bashrc_vagrant.sh
 Source2: vagrant-libvirt.pkla
-Patch0: vagrant-libvirt-nokogiri-version.patch
 Requires(pre): shadow-utils
-Requires: ruby(release)
+Requires: ruby
 Requires: ruby(rubygems) 
 Requires: rubygem(fog) => 1.15
 Requires: rubygem(fog) < 2
@@ -27,9 +26,8 @@ Requires: libvirt-daemon-kvm
 Requires: rubygem(nokogiri)
 Requires: rubygem(multi_json)
 Requires: polkit-pkla-compat
-BuildRequires: ruby(release)
+BuildRequires: ruby
 BuildRequires: rubygems-devel 
-BuildRequires: ruby 
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -52,8 +50,6 @@ gem unpack %{SOURCE0}
 %setup -q -D -T -n  %{gem_name}-%{version}
 
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
-
-%patch0 -p0
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -97,11 +93,9 @@ getent group vagrant >/dev/null || groupadd -r vagrant
 %doc %{gem_instdir}/Gemfile
 %doc %{gem_instdir}/vagrant-libvirt.gemspec
 
-%dir %{gem_instdir}/locales
 %{gem_instdir}/locales
-
-%dir %{gem_instdir}/tools
 %{gem_instdir}/tools
+%{gem_instdir}/spec
 
 %exclude %{gem_cache}
 %exclude %{gem_instdir}/.gitignore
@@ -111,5 +105,8 @@ getent group vagrant >/dev/null || groupadd -r vagrant
 %doc %{gem_docdir}
 
 %changelog
+* Mon Jul 27 2015 Mark Heiges <mheiges@uga.edu> - 0.0.30-1
+- Update to 0.0.30. CentOS 6 compatible.
+
 * Fri Jun 27 2014 Adam Miller <maxamillion@fedoraproject.org> - 0.0.16-1
 - Initial package for Fedora
